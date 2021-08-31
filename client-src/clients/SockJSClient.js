@@ -6,6 +6,7 @@
 const SockJS = require('sockjs-client/dist/sockjs');
 const BaseClient = require('./BaseClient');
 
+// 初始化客户端 socket
 module.exports = class SockJSClient extends BaseClient {
   constructor(url) {
     super();

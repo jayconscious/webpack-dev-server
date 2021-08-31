@@ -51,6 +51,7 @@ const onSocketMessage = {
     }
     sendMessage('Invalid');
   },
+  // Todo: hash 代表是啥？
   hash(hash) {
     status.currentHash = hash;
   },

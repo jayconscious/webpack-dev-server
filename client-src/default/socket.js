@@ -12,6 +12,8 @@
 // important: the path to SockJSClient here is made to work in the 'client'
 // directory, but is updated via the webpack compilation when compiled from
 // the 'client-src' directory
+// Tip:
+
 const Client =
   typeof __webpack_dev_server_client__ !== 'undefined'
     ? __webpack_dev_server_client__

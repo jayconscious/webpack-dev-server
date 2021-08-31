@@ -13,6 +13,7 @@ function reloadApp(
   }
   if (hot) {
     log.info('[WDS] App hot update...');
+    // Todo: 这是如何生效的？
     const hotEmitter = require('webpack/hot/emitter');
     hotEmitter.emit('webpackHotUpdate', currentHash);
     if (typeof self !== 'undefined' && self.window) {

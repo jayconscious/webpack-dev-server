@@ -9,8 +9,10 @@ const net = require('net');
 const debug = require('debug')('webpack-dev-server');
 const importLocal = require('import-local');
 const yargs = require('yargs');
+
 const webpack = require('webpack');
 const Server = require('../lib/Server');
+
 const setupExitSignals = require('../lib/utils/setupExitSignals');
 const colors = require('../lib/utils/colors');
 const processOptions = require('../lib/utils/processOptions');
@@ -19,6 +21,7 @@ const getVersions = require('../lib/utils/getVersions');
 const options = require('./options');
 
 let server;
+// Todo: why? 用对象属性的方式，为了方便更新？
 const serverData = {
   server: null,
 };
@@ -26,9 +29,13 @@ const serverData = {
 // we can update this server property later, and setupExitSignals will be able to
 // recognize that the server has been instantiated, because we will set
 // serverData.server to the new server object.
+// Tip:
+// 我们必须传递一个包含服务器对象作为属性的对象，以便我们可以稍后更新此服务器属性。
+// 并且 setupExitSignals 将能够认识到服务器已被实例化，因为我们将 serverData.server 设置为新的服务器对象。
 setupExitSignals(serverData);
 
 // Prefer the local installation of webpack-dev-server
+// 首选本地安装 webpack-dev-server
 if (importLocal(__filename)) {
   debug('Using local install of webpack-dev-server');
 
@@ -45,6 +52,7 @@ try {
   console.error('-> When using npm: npm i -D webpack-cli');
   console.error('-> When using yarn: yarn add -D webpack-cli');
 
+  // why set exitcode 1 ?
   process.exitCode = 1;
 }
 
@@ -69,6 +77,7 @@ require(configYargsPath)(yargs);
 yargs.version(getVersions());
 yargs.options(options);
 
+// 获取参数
 const argv = yargs.argv;
 
 // webpack-cli@3.3 path : 'webpack-cli/bin/utils/convert-argv'
@@ -81,6 +90,8 @@ try {
 }
 // eslint-disable-next-line import/no-extraneous-dependencies
 // eslint-disable-next-line import/no-dynamic-require
+
+// 通过 webpack-cli 和 yargs 合并配置
 const config = require(convertArgvPath)(yargs, argv, {
   outputFilename: '/bundle.js',
 });
@@ -91,6 +102,7 @@ function startDevServer(config, options) {
   let compiler;
 
   try {
+    // Todo: webpack的产物
     compiler = webpack(config);
   } catch (err) {
     if (err instanceof webpack.WebpackOptionsValidationError) {
@@ -115,6 +127,7 @@ function startDevServer(config, options) {
     throw err;
   }
 
+  //  options.socket is what?
   if (options.socket) {
     server.listeningApp.on('error', (e) => {
       if (e.code === 'EADDRINUSE') {
@@ -154,6 +167,7 @@ function startDevServer(config, options) {
       });
     });
   } else {
+    // 服务启动
     server.listen(options.port, options.host, (err) => {
       if (err) {
         throw err;
